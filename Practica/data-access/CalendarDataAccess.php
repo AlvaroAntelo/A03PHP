@@ -12,7 +12,7 @@ class CalendarDataAccess
         $this->pdo = new PDO("sqlite:" . $dbFile);
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->createTables();
-        $this->createInitialDataIfTablesEmpty();
+        //$this->createInitialDataIfTablesEmpty();
     }
 
     private function createTables(): void
