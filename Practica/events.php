@@ -141,7 +141,9 @@ $errorMsg = "";
     </div>
 
 </div>
-
+<div>
+    <p><a href="logout.php">Logout</a></p>
+</div>
 
 </body>
 </html>
