@@ -22,21 +22,25 @@ $isPost = $_SERVER['REQUEST_METHOD'] === 'POST';
 if ($isPost) {
     $dbFile = __DIR__ . '/calendar.db';
     $calendarDataAccess = new CalendarDataAccess($dbFile);
-    $recuerdame_form_value = $_POST['recuerdame'] ?? '';
-    if(empty($recuerdame_form_value)){
-        setcookie('recuerdame','',time()-3600);
-        $username='';
-    } else {
-        setcookie('recuerdame',$username ,time()+9999);
-    }
+
     $username = trim($_POST['username'] ?? '');
     $password = trim($_POST['password'] ?? '');
+
+    $recuerdame_form_value = trim($_POST['recuerdame'] ?? '');
+    if(empty($recuerdame_form_value)){
+        setcookie('recuerdame','',time()-3600);
+        //$username='';
+    } else {
+        setcookie('recuerdame', $username , time()+9999);
+    }
+ 
     $user = $calendarDataAccess->getUserByEmail($username) ?? '';
-   
+
     // Verificar si el usuario existe
     if (!empty($user) && password_verify($password, $user->getPassword())) {
-        $_SESSION['current-user'] = $username;
-        //header('Location: events.php', true, 302);
+        $_SESSION['current-user'] = $user->getId();
+        $_SESSION['user-id'] = $user->getId();
+        header('Location: events.php', true, 302);
         exit();
     } else {
         $errors[] = "No existe el usuario o la contraseña es incorrecta.";
@@ -60,7 +64,7 @@ if ($isPost) {
 
 <body>
     <div class="container">
-        <h1>Acceso al sistema</h1>
+        <h1 class="card-title text-center mb-4">Acceso al sistema</h1>
 
 
         <?php if (!empty($errors)): ?>
